@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "164576419635",
+    "project_id": "mvideo-f8c18",
+    "storage_bucket": "mvideo-f8c18.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:164576419635:android:82a89fcaf073c0c2152846",
+        "android_client_info": {
+          "package_name": "com.example.mvideo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "164576419635-cc4n3tsa5m13pfl1u8kvh5o84fg94df9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mvideo",
+            "certificate_hash": "0c1f6e982a4549620c431d9fc904354d67f33e84"
+          }
+        },
+        {
+          "client_id": "164576419635-e6hsrfcb85100h25rnrjd362gj894rsc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4eLxPwNMQx8B9gwk49w8Ew9-H8zxoMCo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "164576419635-e6hsrfcb85100h25rnrjd362gj894rsc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
