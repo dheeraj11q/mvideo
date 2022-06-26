@@ -55,7 +55,7 @@ class _ProfileState extends State<Profile> {
                   SizedBox(
                     height: size.height * 0.04,
                   ),
-                  Text('${state.userModel?.email}',
+                  Text('${state.userModel?.dob}',
                       style: theme.textTheme.titleMedium
                           ?.copyWith(fontSize: size.width * 0.06)),
                   SizedBox(

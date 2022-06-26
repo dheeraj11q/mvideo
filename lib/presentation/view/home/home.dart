@@ -72,93 +72,100 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          leading: Builder(builder: (context) {
-            return IconButton(
-                onPressed: () {
-                  Scaffold.of(context).openDrawer();
+      child: WillPopScope(
+        onWillPop: () async {
+          homeCubit?.deleteDecDir();
+          return true;
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            centerTitle: true,
+            leading: Builder(builder: (context) {
+              return IconButton(
+                  onPressed: () {
+                    Scaffold.of(context).openDrawer();
+                  },
+                  icon: const Icon(Icons.menu));
+            }),
+            title: const Text("Mvideo"),
+            actions: [
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => const Profile()));
                 },
-                icon: const Icon(Icons.menu));
-          }),
-          title: const Text("Mvideo"),
-          actions: [
-            GestureDetector(
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const Profile()));
-              },
-              child: BlocBuilder<AuthCubit, AuthState>(
+                child: BlocBuilder<AuthCubit, AuthState>(
+                  builder: (context, state) {
+                    return Container(
+                      margin: const EdgeInsets.only(right: 10),
+                      height: size.height * 0.018,
+                      width: size.width * 0.1,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                              image:
+                                  NetworkImage('${state.userModel!.imageLink}'),
+                              fit: BoxFit.cover)),
+                    );
+                  },
+                ),
+              )
+            ],
+          ),
+          drawer: homeDrawer(size: size, context: context),
+          body: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              // video box
+              BlocBuilder<HomeCubit, HomeState>(
                 builder: (context, state) {
-                  return Container(
-                    margin: const EdgeInsets.only(right: 10),
-                    height: size.height * 0.018,
-                    width: size.width * 0.1,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                            image:
-                                NetworkImage('${state.userModel!.imageLink}'),
-                            fit: BoxFit.cover)),
+                  return Stack(
+                    children: [
+                      SizedBox(
+                        height: size.height * 0.27,
+                        child:
+                            FlickVideoPlayer(flickManager: state.flickManager!),
+                      ),
+                      state.isLoading!
+                          ? Container(
+                              height: size.height * 0.27,
+                              width: size.width,
+                              color: Colors.black,
+                              child: const Center(
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            )
+                          : const SizedBox()
+                    ],
                   );
                 },
               ),
-            )
-          ],
-        ),
-        drawer: homeDrawer(size: size, context: context),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            // video box
-            BlocBuilder<HomeCubit, HomeState>(
-              builder: (context, state) {
-                return Stack(
-                  children: [
-                    SizedBox(
-                      height: size.height * 0.27,
-                      child:
-                          FlickVideoPlayer(flickManager: state.flickManager!),
-                    ),
-                    state.isLoading!
-                        ? Container(
-                            height: size.height * 0.27,
-                            width: size.width,
-                            color: Colors.black,
-                            child: const Center(
-                              child: CircularProgressIndicator(
-                                color: Colors.white,
-                              ),
-                            ),
-                          )
-                        : const SizedBox()
-                  ],
-                );
-              },
-            ),
 
-            videoBottomNav(context, size),
+              videoBottomNav(context, size),
 
-            // video list
+              // video list
 
-            BlocBuilder<HomeCubit, HomeState>(
-              builder: (context, state) {
-                return Expanded(
-                    child: ListView.builder(
-                        itemCount: state.videos?.length,
-                        itemBuilder: (context, index) {
-                          return videoItem(context,
-                              size: size,
-                              videoModel: state.videos![index],
-                              active: (index == state.activeVideo), onTap: () {
-                            homeCubit?.videoItemPlay(index: index);
-                          });
-                        }));
-              },
-            ),
-          ],
+              BlocBuilder<HomeCubit, HomeState>(
+                builder: (context, state) {
+                  return Expanded(
+                      child: ListView.builder(
+                          itemCount: state.videos?.length,
+                          itemBuilder: (context, index) {
+                            return videoItem(context,
+                                size: size,
+                                videoModel: state.videos![index],
+                                active: (index == state.activeVideo),
+                                onTap: () {
+                              homeCubit?.videoItemPlay(index: index);
+                            });
+                          }));
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
